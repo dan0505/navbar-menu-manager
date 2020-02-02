@@ -1,3 +1,5 @@
+= javascript_pack_tag 'deaggable_menu'
+
 h1 Manage Menus
 p Drag items to change column or arrange orders.
 p Click on items to change content.
@@ -9,7 +11,7 @@ p Click on items to change content.
     .col-lg
       strong Submenu
   = form_tag menu_update_all_url, method: :post, multipart: true do
-    - @menus.each do |menu|
+    - @menus.each_with_index do |menu, idx|
       = fields_for "menus[]", menu do |f|
         .row
           .col-md-2
@@ -25,13 +27,13 @@ p Click on items to change content.
                         .form-group
                           = f_submenu.text_field :name, class:"form-control"
                           = f_submenu.hidden_field :id
-                        ul.list-unstyled.mb-0.sortable-list.menu-list class=("menu-list-#{menu.id} menu-col-#{submenu.id}")
+                        ul.list-unstyled.mb-0.sortable-list.menu-list class=("menu-list-#{idx} menu-col-#{submenu.id}")
                           - submenu.menu_items.each do |item|
                             = f.fields_for "menu_items_attributes[]", item, include_id: false do |f_item|
                               li.mb-1
                                 .btn.btn-secondary
                                   = f_item.text_field :name
-                                  i.fas.fa-grip-lines.ml-2
+                                  i.fas.fa-grip-lines.ml-2.drag-handle
                                 = f_item.hidden_field :id
                                 = f_item.hidden_field :sort, class:"item-sort"
                                 = f_item.hidden_field :submenu_id, class:"item-col" 
