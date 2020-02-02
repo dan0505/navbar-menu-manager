@@ -11,4 +11,11 @@ html
   body
     = render "layouts/nav"
     .container
+      - flash.each do |key, value|
+        .alert.alert-dismissible.fade.show role="alert" class="alert-#{key}" 
+          = value
+          button.close type="button" data-dismiss="alert" aria-label="Close"
+            span aria-hidden="true" &times
+  </button>
+    .container
       = yield

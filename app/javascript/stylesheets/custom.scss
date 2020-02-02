@@ -35,3 +35,17 @@
 		overflow-x: hidden;
 	}
 }
+
+.sortable-list {
+  background-color: rgba(146, 154, 160, 0.3); 
+  min-height: 2em; 
+  border-radius: 5px; 
+  padding: 5px;
+  li div {
+    input {
+    color: #fff;
+    background-color: #6c757d;
+    border:none;
+    }
+  };
+}

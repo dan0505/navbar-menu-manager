@@ -1,5 +1,41 @@
-.row
-  .col-md-8
-    h1 Manage Menus
+h1 Manage Menus
+p Drag items to change column or arrange orders.
+p Click on items to change content.
 
-
+.container
+  .row
+    .col-md-2 
+      strong Menu
+    .col-lg
+      strong Submenu
+  = form_tag menu_update_all_url, method: :post, multipart: true do
+    - @menus.each do |menu|
+      = fields_for "menus[]", menu do |f|
+        .row
+          .col-md-2
+            .form-group
+              = f.text_field :name, class:"form-control"
+          .col-lg
+            .card.mb-2
+              .card-body
+                .row
+                  - menu.submenus.each do |submenu|
+                    = f.fields_for "submenus_attributes[]", submenu, include_id: false do |f_submenu|
+                      .col
+                        .form-group
+                          = f_submenu.text_field :name, class:"form-control"
+                          = f_submenu.hidden_field :id
+                        ul.list-unstyled.mb-0.sortable-list.menu-list class=("menu-list-#{menu.id} menu-col-#{submenu.id}")
+                          - submenu.menu_items.each do |item|
+                            = f.fields_for "menu_items_attributes[]", item, include_id: false do |f_item|
+                              li.mb-1
+                                .btn.btn-secondary
+                                  = f_item.text_field :name
+                                  i.fas.fa-grip-lines.ml-2
+                                = f_item.hidden_field :id
+                                = f_item.hidden_field :sort, class:"item-sort"
+                                = f_item.hidden_field :submenu_id, class:"item-col" 
+    .row.justify-content-around.align-items-center.mb-5
+      .col.text-right
+        = link_to "Cancel", menu_manage_url, class: "btn btn-secondary mr-2"
+        = submit_tag 'Save Changes', class: "btn btn-primary"
